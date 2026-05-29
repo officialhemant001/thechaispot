@@ -1,5 +1,6 @@
 import { useMenu } from '../../context/MenuContext';
 import MenuCard from './MenuCard';
+import { SkeletonGrid } from '../UI/Loader';
 import './MenuGrid.css';
 
 export default function MenuGrid({ onItemClick }) {
@@ -8,11 +9,7 @@ export default function MenuGrid({ onItemClick }) {
   if (loading) {
     return (
       <div className="menu-grid-container container">
-        <div className="menu-grid">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(n => (
-            <div key={n} style={{ height: '350px' }} className="skeleton"></div>
-          ))}
-        </div>
+        <SkeletonGrid count={8} />
       </div>
     );
   }

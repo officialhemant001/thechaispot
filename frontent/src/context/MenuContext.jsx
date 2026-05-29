@@ -60,20 +60,21 @@ export function MenuProvider({ children }) {
 
   // Filtered items based on search and active category
   const getFilteredItems = useCallback(() => {
-    let items = allItems;
+    let items = allItems || [];
 
     if (activeCategory !== 'all') {
       const cat = menuData.find(c => c.slug === activeCategory);
-      items = cat ? cat.items : [];
+      items = cat ? (cat.items || []) : [];
     }
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      items = items.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query) ||
-        item.category_name.toLowerCase().includes(query)
-      );
+    if (searchQuery && searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      items = items.filter(item => {
+        const nameMatch = item.name && typeof item.name === 'string' && item.name.toLowerCase().includes(query);
+        const descMatch = item.description && typeof item.description === 'string' && item.description.toLowerCase().includes(query);
+        const categoryMatch = item.category_name && typeof item.category_name === 'string' && item.category_name.toLowerCase().includes(query);
+        return !!(nameMatch || descMatch || categoryMatch);
+      });
     }
 
     return items;
