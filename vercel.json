@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd frontent && npm run build",
+  "outputDirectory": "frontent/dist",
+  "installCommand": "cd frontent && npm install",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
