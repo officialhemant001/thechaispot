@@ -1,0 +1,99 @@
+/* ── Food Type Badge ─────────────────────────────────────────── */
+.food-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.food-badge--veg {
+  color: var(--badge-veg);
+  border: 1.5px solid var(--badge-veg);
+}
+
+.food-badge--nonveg {
+  color: var(--badge-nonveg);
+  border: 1.5px solid var(--badge-nonveg);
+}
+
+.food-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.food-badge--veg .food-badge__dot {
+  background-color: var(--badge-veg);
+}
+
+.food-badge--nonveg .food-badge__dot {
+  background-color: var(--badge-nonveg);
+}
+
+.food-badge__text {
+  line-height: 1;
+}
+
+/* ── Generic Badge ──────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.badge__icon {
+  font-size: 0.75rem;
+}
+
+.badge--bestseller {
+  background: linear-gradient(135deg, #FFF3CD, #FFE69C);
+  color: #856404;
+}
+
+[data-theme="dark"] .badge--bestseller {
+  background: linear-gradient(135deg, rgba(212, 160, 74, 0.25), rgba(212, 160, 74, 0.15));
+  color: #E8B84A;
+}
+
+.badge--special {
+  background: linear-gradient(135deg, #FFE4CC, #FFD1A3);
+  color: #C2410C;
+}
+
+[data-theme="dark"] .badge--special {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(249, 115, 22, 0.15));
+  color: #FB923C;
+}
+
+.badge--new {
+  background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  color: #6D28D9;
+}
+
+[data-theme="dark"] .badge--new {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(139, 92, 246, 0.15));
+  color: #A78BFA;
+}
+
+.badge--discount {
+  background: linear-gradient(135deg, #FEE2E2, #FECACA);
+  color: #DC2626;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .badge--discount {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(239, 68, 68, 0.15));
+  color: #F87171;
+}
