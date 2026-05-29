@@ -21,10 +21,18 @@ export default function MenuItemModal({ item, onClose }) {
 
   if (!item) return null;
 
-  // Ensure absolute image URL
+  // Ensure absolute image URL or production-safe fallback
   let imageUrl = item.image_url;
   if (imageUrl && !imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
-    imageUrl = `${API_BASE_URL}${imageUrl}`;
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const hasCustomApiUrl = !!import.meta.env.VITE_API_URL;
+    
+    // If in production and no remote API, skip localhost:8000 calls
+    if (API_BASE_URL.includes('localhost') && !isLocalhost && !hasCustomApiUrl) {
+      imageUrl = null;
+    } else {
+      imageUrl = `${API_BASE_URL}${imageUrl}`;
+    }
   }
 
   const fallbackImage = getPlaceholderImage(item.category_slug || '', item.slug || '');

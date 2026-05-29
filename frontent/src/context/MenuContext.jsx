@@ -17,25 +17,68 @@ export function MenuProvider({ children }) {
     try {
       setLoading(true);
       setError(null);
-      const [restaurantRes, menuRes] = await Promise.all([
-        fetchRestaurant(),
-        fetchMenu(),
-      ]);
+      
+      let restaurantData;
+      let menuData;
+
+      // Determine if we should bypass localhost Django server and immediately load static JSON files
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const hasCustomApiUrl = !!import.meta.env.VITE_API_URL;
+
+      if (!isLocalhost && !hasCustomApiUrl) {
+        console.log('Production mode (static fallback): fetching from local public JSONs');
+        const [restaurantRes, menuRes] = await Promise.all([
+          fetch('/restaurant.json').then(r => {
+            if (!r.ok) throw new Error('Static restaurant.json not found');
+            return r.json();
+          }),
+          fetch('/menu.json').then(r => {
+            if (!r.ok) throw new Error('Static menu.json not found');
+            return r.json();
+          })
+        ]);
+        restaurantData = restaurantRes;
+        menuData = menuRes;
+      } else {
+        try {
+          console.log('Fetching menu and restaurant data from backend API...');
+          const [restaurantRes, menuRes] = await Promise.all([
+            fetchRestaurant(),
+            fetchMenu(),
+          ]);
+          restaurantData = restaurantRes.data;
+          menuData = menuRes.data;
+        } catch (apiErr) {
+          console.warn('Django API fetch failed, trying static fallback JSONs...', apiErr);
+          const [restaurantRes, menuRes] = await Promise.all([
+            fetch('/restaurant.json').then(r => {
+              if (!r.ok) throw new Error('Static restaurant.json not found');
+              return r.json();
+            }),
+            fetch('/menu.json').then(r => {
+              if (!r.ok) throw new Error('Static menu.json not found');
+              return r.json();
+            })
+          ]);
+          restaurantData = restaurantRes;
+          menuData = menuRes;
+        }
+      }
 
       // Enrich menu items with category slugs
-      const enrichedMenuData = menuRes.data.map(cat => ({
+      const enrichedMenuData = menuData.map(cat => ({
         ...cat,
-        items: cat.items.map(item => ({
+        items: (cat.items || []).map(item => ({
           ...item,
           category_slug: cat.slug
         }))
       }));
 
-      setRestaurant(restaurantRes.data);
+      setRestaurant(restaurantData);
       setMenuData(enrichedMenuData);
 
       // Flatten all items from all categories
-      const items = enrichedMenuData.reduce((acc, cat) => [...acc, ...cat.items], []);
+      const items = enrichedMenuData.reduce((acc, cat) => [...acc, ...(cat.items || [])], []);
       setAllItems(items);
 
       // Extract category list
@@ -44,7 +87,7 @@ export function MenuProvider({ children }) {
         name: cat.name,
         slug: cat.slug,
         icon: cat.icon,
-        item_count: cat.items.length,
+        item_count: (cat.items || []).length,
       })));
     } catch (err) {
       console.error('Failed to load menu data:', err);

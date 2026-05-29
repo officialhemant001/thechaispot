@@ -1,0 +1,15 @@
+{
+  "id": 1,
+  "name": "The Chai Spot",
+  "tagline": "Where every sip tells a story",
+  "description": "Welcome to The Chai Spot — your cozy neighborhood cafe serving handcrafted chai, premium coffee, fresh bakes, and delicious snacks. Every cup is brewed with love and the finest ingredients.",
+  "logo_url": null,
+  "banner_url": null,
+  "address": "123 Chai Street, Café Lane, Mumbai, India",
+  "phone": "+91 98765 43210",
+  "email": "hello@thechaispot.com",
+  "opening_hours": "8:00 AM – 10:00 PM",
+  "instagram": "",
+  "facebook": "",
+  "is_active": true
+}
